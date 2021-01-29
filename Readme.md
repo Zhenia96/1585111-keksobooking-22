@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Yauheni Kirychenka](https://up.htmlacademy.ru/javascript/22/user/1585111).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий Гуляев](https://htmlacademy.ru/profile/dima).
 
 ---
 
