@@ -40,4 +40,8 @@ const getRandomElements = (array) => {
   return result;
 }
 
-export { getRandomNumber, getRandomElements };
+const hideElement = (element) => {
+  element.classList.add('visually-hidden');
+}
+
+export { getRandomNumber, getRandomElements, hideElement };
