@@ -1,5 +1,6 @@
 import { createAd } from './ad.js';
 import { createCard } from './card.js';
+import { } from './form.js';
 
 const canvas = document.querySelector('.map__canvas');
 
