@@ -3,10 +3,18 @@ import { hideElement } from './util.js'
 const cardTemplate = document.querySelector('#card').content;
 const card = cardTemplate.querySelector('.popup');
 
-const createPrice = (price) => `${price} <span>₽/ночь</span>`;
+const createPrice = (priceElement, priceValue) => {
+  if (priceValue) {
+    const currency = priceElement.querySelector('span');
+    priceElement.textContent = `${priceValue} `;
+    priceElement.appendChild(currency);
+  } else {
+    hideElement(priceElement);
+  }
+}
 
-const selectType = (type) => {
-  switch (type) {
+const selectType = (housingType) => {
+  switch (housingType) {
     case 'flat':
       return 'Квартиры';
     case 'bungalow':
@@ -70,7 +78,7 @@ const createCard = ({ author, offer }) => {
   avatar.src = author.avatar ? author.avatar : hideElement(avatar);
   makeContent(title, offer.title);
   makeContent(address, offer.address);
-  price.innerHTML = offer.price ? createPrice(offer.price) : hideElement(price);
+  createPrice(price, offer.price);
   type.textContent = offer.type ? selectType(offer.type) : hideElement(type);
   capacity.textContent = offer.rooms && offer.guests ? createCapacity(offer.rooms, offer.guests) : hideElement(capacity);
   time.textContent = offer.checkin && offer.checkout ? createTime(offer.checkin, offer.checkout) : hideElement(time);
