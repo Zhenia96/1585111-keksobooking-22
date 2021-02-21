@@ -1,9 +1,11 @@
 const form = document.querySelector('.ad-form');
+const fields = form.querySelectorAll('fieldset')
 const housingType = form.querySelector('#type');
 const price = form.querySelector('#price');
 const time = form.querySelector('.ad-form__element--time');
 const timeIn = time.querySelector('#timein');
 const timeOut = time.querySelector('#timeout');
+const address = form.querySelector('#address');
 
 const getMinPrice = (housingType) => {
   switch (housingType) {
@@ -19,7 +21,7 @@ const getMinPrice = (housingType) => {
 }
 
 const changeMinPrice = (housingType) => {
-  let minPrice = getMinPrice(housingType);
+  const minPrice = getMinPrice(housingType);
   price.placeholder = minPrice;
   price.min = minPrice;
 }
@@ -36,3 +38,22 @@ time.addEventListener('change', (evt) => {
     timeIn.value = eventInitiator.value;
   }
 })
+
+const disableForm = (status) => {
+  if (status) {
+    form.classList.add('ad-form--disabled');
+  } else {
+    form.classList.remove('ad-form--disabled');
+  }
+  fields.forEach(field => {
+    field.disabled = status;
+  })
+}
+
+address.readOnly = 'true';
+
+const changeAddress = (firstCoordinate, secondCoordinate) => {
+  address.value = `${firstCoordinate}, ${secondCoordinate}`;
+}
+
+export { disableForm, changeAddress };

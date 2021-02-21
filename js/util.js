@@ -27,7 +27,6 @@ const getRandomNumber = (firstLimit, secondLimit, simbolCount = 0) => {
   return Number(number);
 }
 
-
 const getRandomElements = (array) => {
   let result = [];
 
