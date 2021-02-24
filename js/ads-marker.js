@@ -1,6 +1,6 @@
 /* global L:readonly */
 const icon = L.icon({
-  iconUrl: '../img/pin.svg',
+  iconUrl: 'img/pin.svg',
   iconSize: [50, 50],
   iconAnchor: [25, 50],
 })
