@@ -2,7 +2,7 @@
 import { changeAddress } from './form.js';
 
 const icon = L.icon({
-  iconUrl: '../img/main-pin.svg',
+  iconUrl: 'img/main-pin.svg',
   iconSize: [50, 50],
   iconAnchor: [25, 50],
 });
