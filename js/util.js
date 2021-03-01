@@ -1,3 +1,10 @@
+const errorTemplate = document.querySelector('#error').content;
+const error = errorTemplate.querySelector('.error');
+const errorButton = error.querySelector('.error__button');
+const successTemplate = document.querySelector('#success').content;
+const success = successTemplate.querySelector('.success');
+const main = document.querySelector('main');
+
 const generateNumber = (min, max) => {
   let number;
 
@@ -43,4 +50,55 @@ const hideElement = (element) => {
   element.classList.add('visually-hidden');
 }
 
-export { getRandomNumber, getRandomElements, hideElement };
+const showErrorMessage = () => {
+  const ERROR_MESSAGE_SHOW_TIME = 6000;
+  const errorMessageBlock = document.createElement('div');
+
+  errorMessageBlock.style.position = 'absolute';
+  errorMessageBlock.style.top = '0';
+  errorMessageBlock.style.left = '20%';
+  errorMessageBlock.style.zIndex = '1000';
+  errorMessageBlock.style.padding = '10px';
+  errorMessageBlock.style.width = '60%';
+  errorMessageBlock.style.textAlign = 'center';
+  errorMessageBlock.style.backgroundColor = 'orange';
+  errorMessageBlock.textContent = 'Конишуа, невозможно отобразить объявления';
+
+  document.body.appendChild(errorMessageBlock);
+
+  setTimeout(() => errorMessageBlock.remove(), ERROR_MESSAGE_SHOW_TIME);
+};
+
+const showSuccessPopup = () => {
+  success.style.zIndex = '1000';
+  main.appendChild(success);
+  document.addEventListener('keydown', (evt) => {
+    if (evt.code === 'Escape') {
+      success.remove();
+    }
+  })
+  document.addEventListener('click', () => {
+    success.remove();
+  })
+}
+
+const showErrorPopup = () => {
+  error.style.zIndex = '1000';
+  main.appendChild(error);
+
+  document.addEventListener('keydown', (evt) => {
+    if (evt.code === 'Escape') {
+      error.remove();
+    }
+  })
+
+  document.addEventListener('click', () => {
+    error.remove();
+  })
+
+  errorButton.addEventListener('click', () => {
+    error.remove();
+  })
+}
+
+export { getRandomNumber, getRandomElements, hideElement, showErrorMessage, showSuccessPopup, showErrorPopup };
