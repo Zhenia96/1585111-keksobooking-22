@@ -1,14 +1,7 @@
-import { createAd } from './ad.js';
-import { createCard } from './card.js';
-import { } from './form.js';
-import { addAdsMarker, addMainMarker } from './map.js';
-
-const ads = new Array(10).fill(null);
-ads.forEach((value, index, array) => array[index] = createAd());
+import { addMainMarker, implementAds } from './map.js';
+import { getData } from './data.js';
+import { showErrorMessage } from './util.js';
 
 addMainMarker();
 
-ads.forEach((value) => {
-  const card = createCard(value);
-  addAdsMarker(value.location, card);
-})
+getData(implementAds, showErrorMessage);

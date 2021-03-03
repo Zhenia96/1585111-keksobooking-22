@@ -2,6 +2,7 @@
 import { disableForm } from './form.js';
 import { createMainMarker } from './main-marker.js';
 import { createAdsMarker } from './ads-marker.js';
+import { createCard } from './card.js';
 
 const filterForm = document.querySelector('.map__filters');
 const filters = document.querySelectorAll('.map__filter');
@@ -38,15 +39,27 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   },
 ).addTo(map);
 
+const mainMarker = createMainMarker(TOKYO_CENTER_COORDINATES);
+
 const addMainMarker = () => {
-  const mainMarker = createMainMarker(TOKYO_CENTER_COORDINATES);
   mainMarker.addTo(map);
 }
 
+const setMainMarkerPosition = (position = TOKYO_CENTER_COORDINATES) => {
+  mainMarker.setLatLng(position);
+}
+
 const addAdsMarker = (location, card) => {
-  const marker = createAdsMarker(location.x, location.y);
+  const marker = createAdsMarker(location.lat, location.lng);
   marker.addTo(map);
   marker.bindPopup(card);
 }
 
-export { addMainMarker, addAdsMarker };
+const implementAds = (ads) => {
+  ads.forEach((ad) => {
+    const card = createCard(ad);
+    addAdsMarker(ad.location, card);
+  })
+}
+
+export { addMainMarker, addAdsMarker, implementAds, setMainMarkerPosition, filterForm };

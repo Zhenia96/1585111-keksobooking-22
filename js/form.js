@@ -1,3 +1,7 @@
+import { sendData } from './data.js'
+import { showSuccessPopup, showErrorPopup } from './util.js';
+import { setMainMarkerPosition, filterForm } from './map.js';
+
 const form = document.querySelector('.ad-form');
 const fields = form.querySelectorAll('fieldset')
 const housingType = form.querySelector('#type');
@@ -10,6 +14,7 @@ const capacity = form.querySelector('#capacity');
 const capacityOptions = capacity.querySelectorAll('option');
 const roomNumber = form.querySelector('#room_number');
 const submitButton = form.querySelector('.ad-form__submit');
+const resetButton = form.querySelector('.ad-form__reset');
 const title = form.querySelector('#title');
 
 const getMinPrice = (housingType) => {
@@ -97,6 +102,18 @@ const isGuestsCountValid = (guestsCount, roomsCount) => {
   return false;
 }
 
+const reset = () => {
+  form.reset();
+  filterForm.reset();
+  changeMinPrice(housingType.value);
+  setMainMarkerPosition();
+}
+
+const onSuccess = () => {
+  showSuccessPopup();
+  reset();
+}
+
 capacity.addEventListener('change', () => {
   const currentGuestsCount = capacity.value;
   const currentRoomsCount = roomNumber.value;
@@ -158,6 +175,7 @@ price.addEventListener('input', () => {
 })
 
 submitButton.addEventListener('click', () => {
+  showSuccessPopup();
   indicateInvalidField(title);
   indicateInvalidField(price);
   const currentGuestsCount = capacity.value;
@@ -167,12 +185,19 @@ submitButton.addEventListener('click', () => {
   }
 })
 
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  reset();
+})
+
 form.addEventListener('submit', (evt) => {
+  evt.preventDefault();
   const currentGuestsCount = capacity.value;
   const currentRoomsCount = roomNumber.value;
-  if (!isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
-    evt.preventDefault();
+  if (isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
+    const formData = new FormData(form);
+    sendData(formData, showErrorPopup, onSuccess);
   }
 })
 
-export { disableForm, changeAddress };
+export { disableForm, changeAddress, form };
