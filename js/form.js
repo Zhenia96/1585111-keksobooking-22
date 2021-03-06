@@ -1,5 +1,5 @@
-import { sendData } from './data.js'
-import { showSuccessPopup, showErrorPopup } from './util.js';
+import { sendData, getData } from './data.js'
+import { showSuccessPopup, showErrorPopup, showErrorMessage } from './util.js';
 import { setMainMarkerPosition } from './map.js';
 import { filter } from './filter.js';
 
@@ -106,6 +106,7 @@ const isGuestsCountValid = (guestsCount, roomsCount) => {
 const reset = () => {
   form.reset();
   filter.reset();
+  getData(showErrorMessage);
   changeMinPrice(housingType.value);
   setMainMarkerPosition();
 }

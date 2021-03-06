@@ -1,10 +1,10 @@
 import { setFilterChangeListener, disableFilters } from './filter.js';
 
-const formAddress = 'https://22.javascript.pages.academy/keksobooking';
-const adsAddress = 'https://22.javascript.pages.academy/keksobooking/data';
+const FORM_ADDRESS = 'https://22.javascript.pages.academy/keksobooking';
+const ADS_ADDRESS = 'https://22.javascript.pages.academy/keksobooking/data';
 
 const getData = (showErrorMessage) => {
-  return fetch(adsAddress)
+  return fetch(ADS_ADDRESS)
     .then((response) => {
       if (response.ok) {
         disableFilters(false);
@@ -18,7 +18,7 @@ const getData = (showErrorMessage) => {
 }
 
 const sendData = (formData, showErrorPopup, onSuccess) => {
-  return fetch(formAddress,
+  return fetch(FORM_ADDRESS,
     {
       method: 'POST',
       body: formData,

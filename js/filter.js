@@ -27,70 +27,60 @@ const getfeaturesValues = (features) => {
   return featuresValues;
 }
 
-const getPriceRank = (price) => {
-  let rank = '';
-  if (price <= 10000) {
-    rank = 'low'
-  } else if (price < 50000) {
-    rank = 'middle'
-  } else {
-    rank = 'high';
+const isValidPrice = (priceRank, price) => {
+  switch (priceRank) {
+    case 'low':
+      return price <= 10000;
+    case 'middle':
+      return price >= 10000 && price <= 50000;
+    case 'high':
+      return price >= 50000;
+    default:
+      return true;
   }
-  return rank;
 }
 
-const getAdsRank = (offer) => {
+const hasFeatures = (adFeatures) => {
+  const filterFeatures = getfeaturesValues(filter.querySelectorAll('[name="features"]:checked'));
+
+  return !filterFeatures.some((filter) => !adFeatures.includes(filter));
+}
+
+const filterAds = (ads) => {
   const type = filter.querySelector('#housing-type').value;
-  const price = filter.querySelector('#housing-price').value;
+  const priceRank = filter.querySelector('#housing-price').value;
   const roomsCount = filter.querySelector('#housing-rooms').value;
   const guestsCount = filter.querySelector('#housing-guests').value;
-  const features = filter.querySelectorAll('[name="features"]:checked');
-  const featuresValues = getfeaturesValues(features);
-  const HIGT_PRIORITY = 3;
 
-  let rank = 0;
+  const filteredAds = ads.filter((ad) => {
 
-  if (type === offer.type || type === DEFAULT_FILTER_VALUE) {
-    rank += HIGT_PRIORITY;
-  }
-  if (price === getPriceRank(offer.price) || price === DEFAULT_FILTER_VALUE) {
-    rank++;
-  }
-  if (Number(roomsCount) === Number(offer.rooms) || roomsCount === DEFAULT_FILTER_VALUE) {
-    rank++;
-  }
-  if (Number(guestsCount) === Number(offer.guests) || guestsCount === DEFAULT_FILTER_VALUE) {
-    rank++;
-  }
-
-  featuresValues.forEach((feature) => {
-    if (offer.features.includes(feature)) {
-      rank++;
+    if (!(type === ad.offer.type || type === DEFAULT_FILTER_VALUE)) {
+      return
     }
+    if (!isValidPrice(priceRank, ad.offer.price)) {
+      return
+    }
+    if (!(Number(roomsCount) === Number(ad.offer.rooms) || roomsCount === DEFAULT_FILTER_VALUE)) {
+      return
+    }
+    if (!(Number(guestsCount) === Number(ad.offer.guests) || guestsCount === DEFAULT_FILTER_VALUE)) {
+      return
+    }
+    if (!hasFeatures(ad.offer.features)) {
+      return
+    }
+
+    return ad;
   })
 
-  return rank;
+  return filteredAds;
 }
-
-const compareAds = (firstAd, secondAd) => {
-  const firstAdRank = getAdsRank(firstAd.offer);
-  const secondAdRank = getAdsRank(secondAd.offer);
-
-  return secondAdRank - firstAdRank;
-}
-
-const sortAds = (ads) => {
-  const sortedAds = ads
-    .slice()
-    .sort(compareAds);
-  return sortedAds;
-}
-
 
 const setFilterChangeListener = (ads) => {
   implementAds(ads.slice(0, ADS_COUNT));
   filter.addEventListener('change', _.debounce(() => {
-    implementAds(sortAds(ads).slice(0, ADS_COUNT));
+    const filteredAds = filterAds(ads);
+    implementAds(filteredAds.slice(0, ADS_COUNT));
   }, 500))
 }
 

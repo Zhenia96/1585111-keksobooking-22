@@ -4,7 +4,7 @@ const errorButton = error.querySelector('.error__button');
 const successTemplate = document.querySelector('#success').content;
 const success = successTemplate.querySelector('.success');
 const main = document.querySelector('main');
-const keyEscape = 'Escape';
+const KEY_ESCAPE = 'Escape';
 
 const generateNumber = (min, max) => {
   let number;
@@ -74,7 +74,7 @@ const showSuccessPopup = () => {
   success.style.zIndex = '1000';
   main.appendChild(success);
   document.addEventListener('keydown', (evt) => {
-    if (evt.code === keyEscape) {
+    if (evt.code === KEY_ESCAPE) {
       success.remove();
     }
   })
@@ -88,7 +88,7 @@ const showErrorPopup = () => {
   main.appendChild(error);
 
   document.addEventListener('keydown', (evt) => {
-    if (evt.code === keyEscape) {
+    if (evt.code === KEY_ESCAPE) {
       error.remove();
     }
   })

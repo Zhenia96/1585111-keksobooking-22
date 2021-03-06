@@ -11,4 +11,5 @@ mapImage.on('load', () => {
   disableForm(false);
   addMainMarker();
   getData(showErrorMessage);
+  mapImage.removeEventListener('load');
 });
