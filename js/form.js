@@ -4,19 +4,19 @@ import { setMainMarkerPosition } from './map.js';
 import { filter } from './filter.js';
 
 const form = document.querySelector('.ad-form');
-const fields = form.querySelectorAll('fieldset')
-const housingType = form.querySelector('#type');
-const price = form.querySelector('#price');
+const allFields = form.querySelectorAll('fieldset')
+const housingTypeField = form.querySelector('#type');
+const priceField = form.querySelector('#price');
 const time = form.querySelector('.ad-form__element--time');
-const timeIn = time.querySelector('#timein');
-const timeOut = time.querySelector('#timeout');
-const address = form.querySelector('#address');
-const capacity = form.querySelector('#capacity');
-const capacityOptions = capacity.querySelectorAll('option');
-const roomNumber = form.querySelector('#room_number');
+const timeInField = time.querySelector('#timein');
+const timeOutField = time.querySelector('#timeout');
+const addressField = form.querySelector('#address');
+const capacityField = form.querySelector('#capacity');
+const capacityOptions = capacityField.querySelectorAll('option');
+const roomField = form.querySelector('#room_number');
 const submitButton = form.querySelector('.ad-form__submit');
 const resetButton = form.querySelector('.ad-form__reset');
-const title = form.querySelector('#title');
+const titleField = form.querySelector('#title');
 
 const getMinPrice = (housingType) => {
   switch (housingType) {
@@ -33,19 +33,19 @@ const getMinPrice = (housingType) => {
 
 const changeMinPrice = (housingType) => {
   const minPrice = getMinPrice(housingType);
-  price.placeholder = minPrice;
-  price.min = minPrice;
+  priceField.placeholder = minPrice;
+  priceField.min = minPrice;
 }
 
-changeMinPrice(housingType.value);
-housingType.addEventListener('change', () => changeMinPrice(housingType.value));
+changeMinPrice(housingTypeField.value);
+housingTypeField.addEventListener('change', () => changeMinPrice(housingTypeField.value));
 
 time.addEventListener('change', (evt) => {
   const eventInitiator = evt.target;
   if (eventInitiator.id === 'timein') {
-    timeOut.value = eventInitiator.value;
+    timeOutField.value = eventInitiator.value;
   } else {
-    timeIn.value = eventInitiator.value;
+    timeInField.value = eventInitiator.value;
   }
 })
 
@@ -55,15 +55,15 @@ const disableForm = (status) => {
   } else {
     form.classList.remove('ad-form--disabled');
   }
-  fields.forEach(field => {
+  allFields.forEach(field => {
     field.disabled = status;
   })
 }
 
-address.readOnly = 'true';
+addressField.readOnly = 'true';
 
 const changeAddress = (firstCoordinate, secondCoordinate) => {
-  address.value = `${firstCoordinate}, ${secondCoordinate}`;
+  addressField.value = `${firstCoordinate}, ${secondCoordinate}`;
 }
 
 const removeInvalidClass = (field) => {
@@ -107,7 +107,7 @@ const reset = () => {
   form.reset();
   filter.reset();
   getData(showErrorMessage);
-  changeMinPrice(housingType.value);
+  changeMinPrice(housingTypeField.value);
   setMainMarkerPosition();
 }
 
@@ -116,16 +116,16 @@ const onSuccess = () => {
   reset();
 }
 
-capacity.addEventListener('change', () => {
-  const currentGuestsCount = capacity.value;
-  const currentRoomsCount = roomNumber.value;
+capacityField.addEventListener('change', () => {
+  const currentGuestsCount = capacityField.value;
+  const currentRoomsCount = roomField.value;
   if (isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
-    removeInvalidClass(capacity);
+    removeInvalidClass(capacityField);
   }
 })
 
-capacity.addEventListener('click', () => {
-  const currentRoomsCount = roomNumber.value;
+capacityField.addEventListener('click', () => {
+  const currentRoomsCount = roomField.value;
   capacityOptions.forEach((option) => {
     const currentGuestsCount = option.value;
     if (!isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
@@ -134,56 +134,56 @@ capacity.addEventListener('click', () => {
   })
 })
 
-roomNumber.addEventListener('change', () => {
-  const currentGuestsCount = capacity.value;
-  const currentRoomsCount = roomNumber.value;
+roomField.addEventListener('change', () => {
+  const currentGuestsCount = capacityField.value;
+  const currentRoomsCount = roomField.value;
   if (isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
-    removeInvalidClass(capacity);
+    removeInvalidClass(capacityField);
   }
 })
 
-roomNumber.addEventListener('click', () => {
+roomField.addEventListener('click', () => {
   capacityOptions.forEach((option) => {
     option.disabled = false;
   })
 })
 
-title.addEventListener('input', () => {
-  const titleLength = title.value.length;
-  if (titleLength < title.minLength) {
-    title.setCustomValidity(`Слишком короткий заголовок. Введите еще ${title.minLength - titleLength} символов`);
-  } else if (titleLength > title.maxLength) {
-    title.setCustomValidity(`Слишком длинный заголовок. Удалите ${titleLength - title.maxLength} символов`);
+titleField.addEventListener('input', () => {
+  const titleLength = titleField.value.length;
+  if (titleLength < titleField.minLength) {
+    titleField.setCustomValidity(`Слишком короткий заголовок. Введите еще ${titleField.minLength - titleLength} символов`);
+  } else if (titleLength > titleField.maxLength) {
+    titleField.setCustomValidity(`Слишком длинный заголовок. Удалите ${titleLength - titleField.maxLength} символов`);
   } else {
-    title.setCustomValidity('');
-    removeInvalidClass(title);
+    titleField.setCustomValidity('');
+    removeInvalidClass(titleField);
   }
-  title.reportValidity();
+  titleField.reportValidity();
 })
 
-price.addEventListener('input', () => {
-  const currentPrice = Number(price.value);
-  const minPrice = Number(price.min);
-  const maxPrice = Number(price.max);
+priceField.addEventListener('input', () => {
+  const currentPrice = Number(priceField.value);
+  const minPrice = Number(priceField.min);
+  const maxPrice = Number(priceField.max);
   if (currentPrice < minPrice) {
-    price.setCustomValidity(`Цена должна быть не менее ${minPrice}`);
+    priceField.setCustomValidity(`Цена должна быть не менее ${minPrice}`);
   } else if (currentPrice > maxPrice) {
-    price.setCustomValidity(`Цена должна быть не более ${maxPrice}`);
+    priceField.setCustomValidity(`Цена должна быть не более ${maxPrice}`);
   } else {
-    price.setCustomValidity('');
-    removeInvalidClass(price);
+    priceField.setCustomValidity('');
+    removeInvalidClass(priceField);
   }
-  price.reportValidity();
+  priceField.reportValidity();
 })
 
 submitButton.addEventListener('click', () => {
   showSuccessPopup();
-  indicateInvalidField(title);
-  indicateInvalidField(price);
-  const currentGuestsCount = capacity.value;
-  const currentRoomsCount = roomNumber.value;
+  indicateInvalidField(titleField);
+  indicateInvalidField(priceField);
+  const currentGuestsCount = capacityField.value;
+  const currentRoomsCount = roomField.value;
   if (!isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
-    addInvalidClass(capacity);
+    addInvalidClass(capacityField);
   }
 })
 
@@ -194,8 +194,8 @@ resetButton.addEventListener('click', (evt) => {
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  const currentGuestsCount = capacity.value;
-  const currentRoomsCount = roomNumber.value;
+  const currentGuestsCount = capacityField.value;
+  const currentRoomsCount = roomField.value;
   if (isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
     const formData = new FormData(form);
     sendData(formData, showErrorPopup, onSuccess);
