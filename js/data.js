@@ -1,18 +1,24 @@
-const getData = (implementAds, showErrorMessage) => {
-  return fetch('https://22.javascript.pages.academy/keksobooking/data')
+import { setFilterChangeListener, disableFilters } from './filter.js';
+
+const FORM_ADDRESS = 'https://22.javascript.pages.academy/keksobooking';
+const ADS_ADDRESS = 'https://22.javascript.pages.academy/keksobooking/data';
+
+const getData = (showErrorMessage) => {
+  return fetch(ADS_ADDRESS)
     .then((response) => {
       if (response.ok) {
+        disableFilters(false);
         return response.json();
       }
     })
-    .then((adsData) => implementAds(adsData))
+    .then((adsData) => setFilterChangeListener(adsData))
     .catch(() => {
       showErrorMessage();
     })
 }
 
 const sendData = (formData, showErrorPopup, onSuccess) => {
-  return fetch('https://22.javascript.pages.academy/keksobooking',
+  return fetch(FORM_ADDRESS,
     {
       method: 'POST',
       body: formData,

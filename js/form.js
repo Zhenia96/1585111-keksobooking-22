@@ -1,6 +1,7 @@
-import { sendData } from './data.js'
-import { showSuccessPopup, showErrorPopup } from './util.js';
-import { setMainMarkerPosition, filterForm } from './map.js';
+import { sendData, getData } from './data.js'
+import { showSuccessPopup, showErrorPopup, showErrorMessage } from './util.js';
+import { setMainMarkerPosition } from './map.js';
+import { filter } from './filter.js';
 
 const form = document.querySelector('.ad-form');
 const fields = form.querySelectorAll('fieldset')
@@ -104,7 +105,8 @@ const isGuestsCountValid = (guestsCount, roomsCount) => {
 
 const reset = () => {
   form.reset();
-  filterForm.reset();
+  filter.reset();
+  getData(showErrorMessage);
   changeMinPrice(housingType.value);
   setMainMarkerPosition();
 }
