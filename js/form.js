@@ -1,5 +1,5 @@
-import { sendData, getData } from './data.js'
-import { showSuccessPopup, showErrorPopup, showErrorMessage } from './util.js';
+import { sendData, getData } from './data.js';
+import { showSuccessPopup, showErrorPopup, showErrorMessage, isPicture } from './util.js';
 import { setMainMarkerPosition } from './map.js';
 import { filter } from './filter.js';
 
@@ -17,6 +17,13 @@ const roomField = form.querySelector('#room_number');
 const submitButton = form.querySelector('.ad-form__submit');
 const resetButton = form.querySelector('.ad-form__reset');
 const titleField = form.querySelector('#title');
+const avatarField = form.querySelector('#avatar');
+const avatarPreview = form.querySelector('.ad-form-header__preview img');
+const housingImageField = form.querySelector('#images');
+const housingImagePreview = form.querySelector('.ad-form__photo');
+const DEFAULT_AVATAR_PREVIEW = 'img/muffin-grey.svg';
+
+addressField.readOnly = 'true';
 
 const getMinPrice = (housingType) => {
   switch (housingType) {
@@ -38,16 +45,6 @@ const changeMinPrice = (housingType) => {
 }
 
 changeMinPrice(housingTypeField.value);
-housingTypeField.addEventListener('change', () => changeMinPrice(housingTypeField.value));
-
-time.addEventListener('change', (evt) => {
-  const eventInitiator = evt.target;
-  if (eventInitiator.id === 'timein') {
-    timeOutField.value = eventInitiator.value;
-  } else {
-    timeInField.value = eventInitiator.value;
-  }
-})
 
 const disableForm = (status) => {
   if (status) {
@@ -57,29 +54,32 @@ const disableForm = (status) => {
   }
   allFields.forEach(field => {
     field.disabled = status;
+  });
+}
+
+const changeAddress = (firstCoordinate, secondCoordinate) => addressField.value = `${firstCoordinate}, ${secondCoordinate}`;
+
+const removeInvalidClass = (field) => field.classList.remove('invalid');
+
+const addInvalidClass = (field) => field.classList.add('invalid');
+
+const indicateInvalidField = (field) => !field.checkValidity() ? addInvalidClass(field) : removeInvalidClass(field);
+
+const previewAvatar = (file) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => {
+    avatarPreview.src = reader.result;
   })
+  reader.readAsDataURL(file);
 }
 
-addressField.readOnly = 'true';
-
-const changeAddress = (firstCoordinate, secondCoordinate) => {
-  addressField.value = `${firstCoordinate}, ${secondCoordinate}`;
-}
-
-const removeInvalidClass = (field) => {
-  field.classList.remove('invalid');
-}
-
-const addInvalidClass = (field) => {
-  field.classList.add('invalid');
-}
-
-const indicateInvalidField = (field) => {
-  if (!field.checkValidity()) {
-    addInvalidClass(field);
-  } else {
-    removeInvalidClass(field);
-  }
+const previewHousingImage = (file) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => {
+    const image = reader.result;
+    housingImagePreview.innerHTML = `<img src="${image}" alt="Фотография жилья" width="100%" height="100%">`
+  })
+  reader.readAsDataURL(file);
 }
 
 const getPossibleGuestsCount = (roomsCount) => {
@@ -97,15 +97,15 @@ const getPossibleGuestsCount = (roomsCount) => {
 
 const isGuestsCountValid = (guestsCount, roomsCount) => {
   const possibleGuestsCount = getPossibleGuestsCount(roomsCount);
-  if (possibleGuestsCount.includes(guestsCount)) {
-    return true;
-  }
-  return false;
+
+  return possibleGuestsCount.includes(guestsCount);
 }
 
 const reset = () => {
   form.reset();
   filter.reset();
+  avatarPreview.src = DEFAULT_AVATAR_PREVIEW;
+  housingImagePreview.innerHTML = '';
   getData(showErrorMessage);
   changeMinPrice(housingTypeField.value);
   setMainMarkerPosition();
@@ -116,13 +116,24 @@ const onSuccess = () => {
   reset();
 }
 
+housingTypeField.addEventListener('change', () => changeMinPrice(housingTypeField.value));
+
+time.addEventListener('change', (evt) => {
+  const eventInitiator = evt.target;
+  if (eventInitiator.id === 'timein') {
+    timeOutField.value = eventInitiator.value;
+  } else {
+    timeInField.value = eventInitiator.value;
+  }
+});
+
 capacityField.addEventListener('change', () => {
   const currentGuestsCount = capacityField.value;
   const currentRoomsCount = roomField.value;
   if (isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
     removeInvalidClass(capacityField);
   }
-})
+});
 
 capacityField.addEventListener('click', () => {
   const currentRoomsCount = roomField.value;
@@ -132,7 +143,7 @@ capacityField.addEventListener('click', () => {
       option.disabled = true;
     }
   })
-})
+});
 
 roomField.addEventListener('change', () => {
   const currentGuestsCount = capacityField.value;
@@ -140,13 +151,9 @@ roomField.addEventListener('change', () => {
   if (isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
     removeInvalidClass(capacityField);
   }
-})
+});
 
-roomField.addEventListener('click', () => {
-  capacityOptions.forEach((option) => {
-    option.disabled = false;
-  })
-})
+roomField.addEventListener('click', () => capacityOptions.forEach((option) => option.disabled = false));
 
 titleField.addEventListener('input', () => {
   const titleLength = titleField.value.length;
@@ -159,7 +166,7 @@ titleField.addEventListener('input', () => {
     removeInvalidClass(titleField);
   }
   titleField.reportValidity();
-})
+});
 
 priceField.addEventListener('input', () => {
   const currentPrice = Number(priceField.value);
@@ -174,7 +181,23 @@ priceField.addEventListener('input', () => {
     removeInvalidClass(priceField);
   }
   priceField.reportValidity();
-})
+});
+
+avatarField.addEventListener('change', () => {
+  const file = avatarField.files[0];
+  const fileName = file.name;
+  if (isPicture(fileName)) {
+    previewAvatar(file);
+  }
+});
+
+housingImageField.addEventListener('change', () => {
+  const file = housingImageField.files[0];
+  const fileName = file.name;
+  if (isPicture(fileName)) {
+    previewHousingImage(file);
+  }
+});
 
 submitButton.addEventListener('click', () => {
   showSuccessPopup();
@@ -185,12 +208,12 @@ submitButton.addEventListener('click', () => {
   if (!isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
     addInvalidClass(capacityField);
   }
-})
+});
 
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   reset();
-})
+});
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -200,6 +223,6 @@ form.addEventListener('submit', (evt) => {
     const formData = new FormData(form);
     sendData(formData, showErrorPopup, onSuccess);
   }
-})
+});
 
 export { disableForm, changeAddress, form };
