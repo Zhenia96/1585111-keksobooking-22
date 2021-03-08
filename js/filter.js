@@ -3,7 +3,7 @@ import { implementAds } from './map.js';
 
 const featuresField = document.querySelector('.map__features');
 const filter = document.querySelector('.map__filters');
-const filters = document.querySelectorAll('.map__filter');
+const filterFields = document.querySelectorAll('.map__filter');
 const DEFAULT_FILTER_VALUE = 'any';
 const ADS_COUNT = 10;
 
@@ -16,14 +16,14 @@ const disableFilters = (status) => {
 
   featuresField.disabled = status;
 
-  filters.forEach(filter => {
-    filter.disabled = status;
+  filterFields.forEach(field => {
+    field.disabled = status;
   })
 }
 
-const getfeaturesValues = (features) => {
+const getFeaturesValues = (features) => {
   const featuresValues = [];
-  features.forEach(element => featuresValues.push(element.value));
+  features.forEach(feature => featuresValues.push(feature.value));
   return featuresValues;
 }
 
@@ -41,7 +41,7 @@ const isValidPrice = (priceRank, price) => {
 }
 
 const hasFeatures = (adFeatures) => {
-  const filterFeatures = getfeaturesValues(filter.querySelectorAll('[name="features"]:checked'));
+  const filterFeatures = getFeaturesValues(filter.querySelectorAll('[name="features"]:checked'));
 
   return !filterFeatures.some((filter) => !adFeatures.includes(filter));
 }
