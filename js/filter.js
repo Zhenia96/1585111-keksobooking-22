@@ -18,14 +18,10 @@ const disableFilters = (status) => {
 
   filterFields.forEach(field => {
     field.disabled = status;
-  })
+  });
 }
 
-const getFeaturesValues = (features) => {
-  const featuresValues = [];
-  features.forEach(feature => featuresValues.push(feature.value));
-  return featuresValues;
-}
+const getFeaturesValues = (features) => Array.from(features).map((feature) => feature.value);
 
 const isValidPrice = (priceRank, price) => {
   switch (priceRank) {
@@ -81,7 +77,7 @@ const setFilterChangeListener = (ads) => {
   filter.addEventListener('change', _.debounce(() => {
     const filteredAds = filterAds(ads);
     implementAds(filteredAds.slice(0, ADS_COUNT));
-  }, 500))
+  }, 500));
 }
 
 export { setFilterChangeListener, disableFilters, filter }

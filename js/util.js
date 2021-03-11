@@ -6,10 +6,9 @@ const successPopup = successPopupTemplate.querySelector('.success');
 const main = document.querySelector('main');
 const ERROR_MESSAGE_SHOW_TIME = 6000;
 const KEY_ESCAPE = 'Escape';
+const FILE_TYPES_FOR_PICTURE = ['.jpg', '.jpeg', '.png'];
 
-const hideElement = (element) => {
-  element.classList.add('visually-hidden');
-}
+const hideElement = (element) => element.classList.add('visually-hidden');
 
 const showErrorMessage = () => {
   const errorMessage = document.createElement('div');
@@ -61,4 +60,9 @@ const showErrorPopup = () => {
   })
 }
 
-export { hideElement, showErrorMessage, showSuccessPopup, showErrorPopup };
+const isPicture = (pictureName) => {
+  pictureName.toLowerCase();
+  return FILE_TYPES_FOR_PICTURE.some((filesType) => pictureName.endsWith(filesType));
+}
+
+export { hideElement, showErrorMessage, showSuccessPopup, showErrorPopup, isPicture };
