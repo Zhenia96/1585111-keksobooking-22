@@ -65,7 +65,7 @@ const addInvalidClass = (field) => field.classList.add('invalid');
 
 const indicateInvalidField = (field) => !field.checkValidity() ? addInvalidClass(field) : removeInvalidClass(field);
 
-const previewAvatar = (file) => {
+const showAvatar = (file) => {
   const reader = new FileReader();
   reader.addEventListener('load', () => {
     avatarPreview.src = reader.result;
@@ -73,7 +73,7 @@ const previewAvatar = (file) => {
   reader.readAsDataURL(file);
 }
 
-const previewHousingImage = (file) => {
+const showHousingImage = (file) => {
   const reader = new FileReader();
   reader.addEventListener('load', () => {
     const image = reader.result;
@@ -187,7 +187,7 @@ avatarField.addEventListener('change', () => {
   const file = avatarField.files[0];
   const fileName = file.name;
   if (isPicture(fileName)) {
-    previewAvatar(file);
+    showAvatar(file);
   }
 });
 
@@ -195,7 +195,7 @@ housingImageField.addEventListener('change', () => {
   const file = housingImageField.files[0];
   const fileName = file.name;
   if (isPicture(fileName)) {
-    previewHousingImage(file);
+    showHousingImage(file);
   }
 });
 
