@@ -76,6 +76,7 @@ const setFilterChangeListener = (ads) => {
   implementAds(ads.slice(0, ADS_COUNT));
   filter.addEventListener('change', _.debounce(() => {
     const filteredAds = filterAds(ads);
+
     implementAds(filteredAds.slice(0, ADS_COUNT));
   }, 500));
 }
