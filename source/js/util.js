@@ -26,38 +26,53 @@ const showErrorMessage = () => {
   document.body.appendChild(errorMessage);
 
   setTimeout(() => errorMessage.remove(), ERROR_MESSAGE_SHOW_TIME);
-};
+}
+
+const removeSuccessPopup = () => {
+  successPopup.remove();
+  document.removeEventListener('click', successPopupClickHandler);
+  document.removeEventListener('keydown', successPopupKeydownHandler);
+}
+
+const successPopupKeydownHandler = (evt) => {
+  if (evt.code === KEY_ESCAPE) {
+    removeSuccessPopup();
+  }
+}
+
+const successPopupClickHandler = () => removeSuccessPopup();
 
 const showSuccessPopup = () => {
   successPopup.style.zIndex = '1000';
   main.appendChild(successPopup);
-  document.addEventListener('keydown', (evt) => {
-    if (evt.code === KEY_ESCAPE) {
-      successPopup.remove();
-    }
-  })
-  document.addEventListener('click', () => {
-    successPopup.remove();
-  })
+  document.addEventListener('keydown', successPopupKeydownHandler)
+  document.addEventListener('click', successPopupClickHandler)
+}
+
+const removeErrorPopup = () => {
+  errorPopup.remove();
+  document.removeEventListener('keydown', errorPopupKeydownHandler);
+  document.removeEventListener('click', errorPopupClickHandler);
+  errorPopupButton.removeEventListener('click', errorPopupClickHandler);
+}
+
+const errorPopupClickHandler = () => {
+  removeErrorPopup();
+}
+
+const errorPopupKeydownHandler = (evt) => {
+  if (evt.code === KEY_ESCAPE) {
+    removeErrorPopup();
+  }
 }
 
 const showErrorPopup = () => {
   errorPopup.style.zIndex = '1000';
   main.appendChild(errorPopup);
 
-  document.addEventListener('keydown', (evt) => {
-    if (evt.code === KEY_ESCAPE) {
-      errorPopup.remove();
-    }
-  })
-
-  document.addEventListener('click', () => {
-    errorPopup.remove();
-  })
-
-  errorPopupButton.addEventListener('click', () => {
-    errorPopup.remove();
-  })
+  document.addEventListener('keydown', errorPopupKeydownHandler);
+  document.addEventListener('click', errorPopupClickHandler);
+  errorPopupButton.addEventListener('click', errorPopupClickHandler);
 }
 
 const isPicture = (pictureName) => {
