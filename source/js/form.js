@@ -111,11 +111,6 @@ const reset = () => {
   setMainMarkerPosition();
 }
 
-const onSuccess = () => {
-  showSuccessPopup();
-  reset();
-}
-
 housingTypeField.addEventListener('change', () => changeMinPrice(housingTypeField.value));
 
 time.addEventListener('change', (evt) => {
@@ -221,7 +216,7 @@ form.addEventListener('submit', (evt) => {
   const currentRoomsCount = roomField.value;
   if (isGuestsCountValid(currentGuestsCount, currentRoomsCount)) {
     const formData = new FormData(form);
-    sendData(formData, showErrorPopup, onSuccess);
+    sendData(formData, showErrorPopup, showSuccessPopup, reset);
   }
 });
 

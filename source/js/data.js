@@ -17,7 +17,7 @@ const getData = (showErrorMessage) => {
     })
 }
 
-const sendData = (formData, showErrorPopup, onSuccess) => {
+const sendData = (formData, showErrorPopup, showSuccessPopup, reset) => {
   return fetch(FORM_ADDRESS,
     {
       method: 'POST',
@@ -25,7 +25,8 @@ const sendData = (formData, showErrorPopup, onSuccess) => {
     })
     .then((response) => {
       if (response.ok) {
-        onSuccess();
+        showSuccessPopup();
+        reset();
       } else {
         showErrorPopup();
       }
