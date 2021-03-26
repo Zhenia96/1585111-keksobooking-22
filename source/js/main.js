@@ -7,7 +7,7 @@ import { disableForm } from './form.js';
 disableForm(true);
 disableFilters(true);
 
-mapImage.on('load', () => {
+mapImage.addEventListener('load', () => {
   disableForm(false);
   addMainMarker();
   getData(showErrorMessage);

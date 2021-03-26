@@ -6,6 +6,9 @@ const filter = document.querySelector('.map__filters');
 const filterFields = document.querySelectorAll('.map__filter');
 const DEFAULT_FILTER_VALUE = 'any';
 const ADS_COUNT = 10;
+const FUNCTION_DELAY_TIME = 500;
+const LOW_PRICE = 10000;
+const HIGH_PRICE = 50000;
 
 const disableFilters = (status) => {
   if (status) {
@@ -26,11 +29,11 @@ const getFeaturesValues = (features) => Array.from(features).map((feature) => fe
 const isValidPrice = (priceRank, price) => {
   switch (priceRank) {
     case 'low':
-      return price <= 10000;
+      return price <= LOW_PRICE;
     case 'middle':
-      return price >= 10000 && price <= 50000;
+      return price >= LOW_PRICE && price <= HIGH_PRICE;
     case 'high':
-      return price >= 50000;
+      return price >= HIGH_PRICE;
     default:
       return true;
   }
@@ -78,7 +81,7 @@ const setFilterChangeListener = (ads) => {
     const filteredAds = filterAds(ads);
 
     implementAds(filteredAds.slice(0, ADS_COUNT));
-  }, 500));
+  }, FUNCTION_DELAY_TIME));
 }
 
 export { setFilterChangeListener, disableFilters, filter }

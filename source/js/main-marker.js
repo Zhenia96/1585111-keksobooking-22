@@ -18,7 +18,7 @@ const createMainMarker = (initialCoordinate) => {
 
   changeAddress(firstCoordinate, secondCoordinate);
 
-  marker.on('move', (evt) => {
+  marker.addEventListener('move', (evt) => {
     const currentCoordinates = evt.target.getLatLng();
     firstCoordinate = currentCoordinates.lat.toFixed(5);
     secondCoordinate = currentCoordinates.lng.toFixed(5);

@@ -16,7 +16,7 @@ const mapImage = L.tileLayer(MAP_IMAGE_ADDRESS,
 
 mapImage.addTo(map);
 
-mapImage.on('tileerror', () => {
+mapImage.addEventListener('tileerror', () => {
   mapImage.removeEventListener('load');
 });
 
